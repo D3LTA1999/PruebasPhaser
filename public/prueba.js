@@ -19,7 +19,7 @@ let player;
 
 function preload() {
     this.load.image("tilesetNameInPhaser", "assets/tilsets/sokoban_tilesheet.png");
-    this.load.tilemapTiledJSON("level1", "assets/tilemaps/map.json");
+    this.load.tilemapTiledJSON("level1", "assets/tilemaps/bombmap.json");
     this.load.spritesheet("dude", "assets/atlas/dude.png", {
         frameWidth: 32,
         frameHeight: 48
@@ -33,7 +33,7 @@ function create() {
     });
     const tileset = map.addTilesetImage("sokoban_tilesheet", "tilesetNameInPhaser");
     const objetos = map.createStaticLayer("objetos", tileset, 0, 0);
-    const bordes = map.createStaticLayer("bordes", tileset, 0, 0);
+    const relleno = map.createStaticLayer("relleno", tileset, 0, 0);
     const piso = map.createStaticLayer("piso", tileset, 0, 0);
     objetos.setCollisionByProperty({
         collides: true
@@ -161,7 +161,25 @@ function create() {
     });
 }
 
-function update(time, delta) {
+function update() {
+    mover();
+    //Emitir movimientos
+    var x = player.x;
+    var y = player.y;
+    if (player.oldPosition && (x !== player.oldPosition.x || y !== player.oldPosition.y)) {
+        this.socket.emit('MovimientoDeJugador', {
+            x: player.x,
+            y: player.y,
+        });
+    }
+    // save old position data
+    player.oldPosition = {
+        x: player.x,
+        y: player.y,
+    };
+}
+
+function mover() {
     player.body.setVelocity(0);
     if (cursors.left.isDown) {
         player.setVelocityX(-160);
@@ -182,18 +200,4 @@ function update(time, delta) {
     if (cursors.up.isDown && player.body.touching.down) {
         player.setVelocityY(-330);
     }
-    //Emitir movimientos
-    var x = player.x;
-    var y = player.y;
-    if (player.oldPosition && (x !== player.oldPosition.x || y !== player.oldPosition.y)) {
-        this.socket.emit('MovimientoDeJugador', {
-            x: player.x,
-            y: player.y,
-        });
-    }
-    // save old position data
-    player.oldPosition = {
-        x: player.x,
-        y: player.y,
-    };
 }
