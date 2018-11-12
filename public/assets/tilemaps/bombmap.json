@@ -36,18 +36,41 @@
          "width":32,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":4,
+         "name":"SpawnPoint",
+         "objects":[
+                {
+                 "height":0,
+                 "id":1,
+                 "name":"SpawnPoint",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":49,
+                 "y":465
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":4,
- "nextobjectid":1,
+ "nextlayerid":5,
+ "nextobjectid":4,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"2018.09.12",
+ "tiledversion":"1.2.0",
  "tileheight":32,
  "tilesets":[
         {
          "columns":7,
          "firstgid":1,
-         "image":"cajas.png",
+         "image":"..\/tilsets\/cajas.png",
          "imageheight":257,
          "imagewidth":225,
          "margin":0,

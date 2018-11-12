@@ -1,6 +1,6 @@
 const config = {
     type: Phaser.AUTO,
-    width: 1000,
+    width: 1024,
     height: 512,
     parent: "game-container",
     pixelArt: true,
@@ -18,11 +18,11 @@ let controls;
 let player;
 
 function preload() {
-    this.load.image("tilesetNameInPhaser", "assets/tilsets/sokoban_tilesheet.png");
+    this.load.image("tilesetNameInPhaser", "assets/tilsets/cajas.png");
     this.load.tilemapTiledJSON("level1", "assets/tilemaps/bombmap.json");
     this.load.spritesheet("dude", "assets/atlas/dude.png", {
-        frameWidth: 32,
-        frameHeight: 48
+        frameWidth: 31,
+        frameHeight: 32
     });
 }
 
@@ -31,22 +31,22 @@ function create() {
     const map = this.make.tilemap({
         key: "level1"
     });
-    const tileset = map.addTilesetImage("sokoban_tilesheet", "tilesetNameInPhaser");
+    const tileset = map.addTilesetImage("cajas", "tilesetNameInPhaser");
     const objetos = map.createStaticLayer("objetos", tileset, 0, 0);
     const relleno = map.createStaticLayer("relleno", tileset, 0, 0);
     const piso = map.createStaticLayer("piso", tileset, 0, 0);
     objetos.setCollisionByProperty({
         collides: true
     });
-    bordes.setCollisionByProperty({
+    relleno.setCollisionByProperty({
         collides: true
     });
     objetos.setDepth(10);
-    bordes.setDepth(10);
-    const spawnPoint = map.findObject("SpawnPoint", obj => obj.name === "SpawnPoint");
-    player = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "dude");
+    relleno.setDepth(10);
+    const spawnpoint = map.findObject("SpawnPoint", obj => obj.name === "SpawnPoint");
+    player = this.physics.add.sprite(spawnpoint.x, spawnpoint.y, "dude");
     this.physics.add.collider(player, objetos);
-    this.physics.add.collider(player, bordes);
+    this.physics.add.collider(player, relleno);
     //Establecimiento de la conexión con otros jugadores
     let self = this;
     this.socket = io();
@@ -59,7 +59,7 @@ function create() {
             } else {
                 let otro = self.physics.add.sprite(jugadores[i].x, jugadores[i].y, "dude");
                 self.physics.add.collider(otro, objetos);
-                self.physics.add.collider(otro, bordes);
+                self.physics.add.collider(otro, relleno);
                 otro.playerId = jugadores[i].playerId;
                 self.otrosjugadores.push(otro);
             }
