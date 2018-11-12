@@ -47,8 +47,6 @@ function create() {
     player = this.physics.add.sprite(spawnpoint.x, spawnpoint.y, "dude");
     this.physics.add.collider(player, objetos);
     this.physics.add.collider(player, relleno);
-
-
     //Establecimiento de la conexión con otros jugadores
     let self = this;
     this.socket = io();
@@ -69,8 +67,6 @@ function create() {
             }
         }
     });
-
-
     this.anims.create({
         key: 'left',
         frames: this.anims.generateFrameNumbers('dude', {
@@ -119,8 +115,6 @@ function create() {
     camera.startFollow(player);
     camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     cursors = this.input.keyboard.createCursorKeys();
-
-
     // Debug graphics
     this.input.keyboard.once("keydown_D", event => {
         // Turn on physics debugging to show player's hitbox
@@ -133,8 +127,6 @@ function create() {
             faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
         });
     });
-
-
     //Métodos de conexión con el servidor
     this.socket.on('nuevojugador', function(jugador) {
         const avatar = self.add.sprite(jugador.x, jugador.y, "dude");;
@@ -163,21 +155,10 @@ function create() {
 }
 
 function update() {
+    // Efectos de la animación 
     mover();
     //Emitir movimientos
-    var x = player.x;
-    var y = player.y;
-    if (player.oldPosition && (x !== player.oldPosition.x || y !== player.oldPosition.y)) {
-        this.socket.emit('MovimientoDeJugador', {
-            x: player.x,
-            y: player.y,
-        });
-    }
-    // save old position data
-    player.oldPosition = {
-        x: player.x,
-        y: player.y,
-    };
+    emitir_movimeintos();
 }
 
 function mover() {
@@ -201,4 +182,20 @@ function mover() {
     if (cursors.up.isDown && player.body.touching.down) {
         player.setVelocityY(-330);
     }
+}
+
+function emitir_movimeintos() {
+    var x = player.x;
+    var y = player.y;
+    if (player.oldPosition && (x !== player.oldPosition.x || y !== player.oldPosition.y)) {
+        this.socket.emit('MovimientoDeJugador', {
+            x: player.x,
+            y: player.y,
+        });
+    }
+    // save old position data
+    player.oldPosition = {
+        x: player.x,
+        y: player.y,
+    };
 }
