@@ -20,8 +20,8 @@ let player;
 function preload() {
     this.load.image("tilesetNameInPhaser", "assets/tilsets/cajas.png");
     this.load.tilemapTiledJSON("level1", "assets/tilemaps/bombmap.json");
-    this.load.spritesheet("dude", "assets/atlas/dude.png", {
-        frameWidth: 31,
+    this.load.spritesheet("alien", "assets/atlas/alien.png", {
+        frameWidth: 36,
         frameHeight: 32
     });
 }
@@ -44,7 +44,7 @@ function create() {
     objetos.setDepth(10);
     relleno.setDepth(10);
     const spawnpoint = map.findObject("SpawnPoint", obj => obj.name === "SpawnPoint");
-    player = this.physics.add.sprite(spawnpoint.x, spawnpoint.y, "dude");
+    player = this.physics.add.sprite(spawnpoint.x, spawnpoint.y, "alien");
     this.physics.add.collider(player, objetos);
     this.physics.add.collider(player, relleno);
     //Establecimiento de la conexión con otros jugadores
@@ -59,7 +59,7 @@ function create() {
                 player.x = jugadores[i].x;
                 player.y = jugadores[i].y;
             } else {
-                let otro = self.physics.add.sprite(jugadores[i].x, jugadores[i].y, "dude");
+                let otro = self.physics.add.sprite(jugadores[i].x, jugadores[i].y, "alien");
                 self.physics.add.collider(otro, objetos);
                 self.physics.add.collider(otro, relleno);
                 otro.playerId = jugadores[i].playerId;
@@ -69,7 +69,7 @@ function create() {
     });
     this.anims.create({
         key: 'left',
-        frames: this.anims.generateFrameNumbers('dude', {
+        frames: this.anims.generateFrameNumbers('alien', {
             start: 0,
             end: 3
         }),
@@ -79,23 +79,23 @@ function create() {
     this.anims.create({
         key: 'turn',
         frames: [{
-            key: 'dude',
-            frame: 4
+            key: 'alien',
+            frame: 1
         }],
         frameRate: 20
     });
     this.anims.create({
         key: 'right',
-        frames: this.anims.generateFrameNumbers('dude', {
-            start: 5,
-            end: 8
+        frames: this.anims.generateFrameNumbers('alien', {
+            start: 0,
+            end: 3
         }),
         frameRate: 10,
         repeat: -1
     });
     this.anims.create({
         key: 'up',
-        frames: this.anims.generateFrameNumbers('dude', {
+        frames: this.anims.generateFrameNumbers('alien', {
             frame: 4
         }),
         frameRate: 10,
@@ -103,9 +103,8 @@ function create() {
     });
     this.anims.create({
         key: 'down',
-        frames: this.anims.generateFrameNumbers('dude', {
-            start: 5,
-            end: 8
+        frames: this.anims.generateFrameNumbers('alien', {
+            frame: 4
         }),
         frameRate: 10,
         repeat: -1
@@ -129,7 +128,7 @@ function create() {
     });
     //Métodos de conexión con el servidor
     this.socket.on('nuevojugador', function(jugador) {
-        const avatar = self.add.sprite(jugador.x, jugador.y, "dude");;
+        const avatar = self.add.sprite(jugador.x, jugador.y, "alien");;
         avatar.playerId = jugador.playerId;
         self.otrosjugadores.push(avatar);
         console.log(self.otrosjugadores);
@@ -155,7 +154,7 @@ function create() {
 }
 
 function update() {
-    // Efectos de la animación 
+    // Efectos de la animación
     mover();
     //Emitir movimientos
     emitir_movimeintos(this);
