@@ -47,6 +47,8 @@ function create() {
     player = this.physics.add.sprite(spawnpoint.x, spawnpoint.y, "dude");
     this.physics.add.collider(player, objetos);
     this.physics.add.collider(player, relleno);
+
+
     //Establecimiento de la conexión con otros jugadores
     let self = this;
     this.socket = io();
@@ -54,8 +56,10 @@ function create() {
     this.socket.on('Jugadores_conectados', function(jugadores) {
         for (var i = 0; i < jugadores.length; i++) {
             if (jugadores[i].playerId === self.socket.id) {
+                jugadores[i].x = spawnpoint.x;
+                jugadores[i].y = spawnpoint.y;
                 player.x = jugadores[i].x;
-                player.y = jugadores[i].x;
+                player.y = jugadores[i].y;
             } else {
                 let otro = self.physics.add.sprite(jugadores[i].x, jugadores[i].y, "dude");
                 self.physics.add.collider(otro, objetos);
@@ -65,6 +69,8 @@ function create() {
             }
         }
     });
+
+
     this.anims.create({
         key: 'left',
         frames: this.anims.generateFrameNumbers('dude', {
@@ -113,15 +119,8 @@ function create() {
     camera.startFollow(player);
     camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     cursors = this.input.keyboard.createCursorKeys();
-    this.add.text(16, 16, 'Arrow keys to move\nPress "D" to show hitboxes', {
-        font: "18px monospace",
-        fill: "#000000",
-        padding: {
-            x: 20,
-            y: 10
-        },
-        backgroundColor: "#ffffff"
-    }).setScrollFactor(0).setDepth(30);
+
+
     // Debug graphics
     this.input.keyboard.once("keydown_D", event => {
         // Turn on physics debugging to show player's hitbox
@@ -134,6 +133,8 @@ function create() {
             faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
         });
     });
+
+
     //Métodos de conexión con el servidor
     this.socket.on('nuevojugador', function(jugador) {
         const avatar = self.add.sprite(jugador.x, jugador.y, "dude");;

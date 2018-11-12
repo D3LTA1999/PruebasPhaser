@@ -20,8 +20,8 @@ io.on('connection', function(socket) {
     console.log('usuario conectado: ', socket.id);
     // creado nuevo jugador dentro del array jugadores
     jugadores.push({
-        x: Math.floor(Math.random() * 700) + 50,
-        y: Math.floor(Math.random() * 500) + 50,
+        x: 0,
+        y: 0,
         playerId: socket.id
     });
     socket.emit('Jugadores_conectados', jugadores);
