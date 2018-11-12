@@ -158,7 +158,7 @@ function update() {
     // Efectos de la animación 
     mover();
     //Emitir movimientos
-    emitir_movimeintos();
+    emitir_movimeintos(this);
 }
 
 function mover() {
@@ -184,11 +184,11 @@ function mover() {
     }
 }
 
-function emitir_movimeintos() {
+function emitir_movimeintos(self) {
     var x = player.x;
     var y = player.y;
     if (player.oldPosition && (x !== player.oldPosition.x || y !== player.oldPosition.y)) {
-        this.socket.emit('MovimientoDeJugador', {
+        self.socket.emit('MovimientoDeJugador', {
             x: player.x,
             y: player.y,
         });
