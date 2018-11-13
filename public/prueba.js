@@ -24,10 +24,16 @@ function preload() {
         frameWidth: 36,
         frameHeight: 32
     });
+    this.load.spritesheet("bomb", "assets/atlas/dude.png", {
+        frameWidth: 36,
+        frameHeight: 32
+    });
 }
 
 function create() {
     // Creación de las propiedades gráficas de Juego
+
+
     const map = this.make.tilemap({
         key: "level1"
     });
@@ -115,6 +121,18 @@ function create() {
         frameRate: 10,
         repeat: -1
     });
+
+    this.anims.create({
+        key: 'space',
+        frames: this.anims.generateFrameNumbers('bomb', {
+            start: 0,
+            end: 32
+        }),
+        frameRate: 10,
+        repeat: -1
+    });
+
+
     cursors = this.input.keyboard.createCursorKeys();
     const camera = this.cameras.main;
     camera.startFollow(player);
@@ -157,16 +175,25 @@ function create() {
         }
         console.log(self.otrosjugadores);
     });
+
 }
 
 function update() {
     // Efectos de la animación
-    mover();
+    mover(this);
     //Emitir movimientos
     emitir_movimeintos(this);
+
 }
 
-function mover() {
+function bomba(posx, posy, self, objetos, relleno){
+
+   bomb = self.physics.add.sprite(posx, posy, 'bomb');
+   self.physics.add.collider(bomb, objetos);
+   self.physics.add.collider(bomb, relleno);
+}
+
+function mover(self) {
     player.body.setVelocity(0);
     if (cursors.left.isDown) {
         player.setVelocityX(-160);
@@ -186,6 +213,9 @@ function mover() {
     }
     if (cursors.up.isDown && player.body.touching.down) {
         player.setVelocityY(-330);
+    }
+    if(cursors.space.isDown){
+      bomba(player.x,player.y, self, objetos, relleno);
     }
 }
 
