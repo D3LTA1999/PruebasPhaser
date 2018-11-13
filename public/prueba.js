@@ -43,7 +43,11 @@ function create() {
     });
     objetos.setDepth(10);
     relleno.setDepth(10);
-    const spawnpoint = map.findObject("SpawnPoint", obj => obj.name === "SpawnPoint");
+    var spawnpoint = new Array();
+    spawnpoint[0] = map.findObject("SpawnPoint", obj => obj.name === "SpawnPoint");
+    spawnpoint[1] = map.findObject("SpawnPoint", obj => obj.name === "SpawnPoint2");
+    spawnpoint[2] = map.findObject("SpawnPoint", obj => obj.name === "SpawnPoint3");
+    spawnpoint[3] = map.findObject("SpawnPoint", obj => obj.name === "SpawnPoint4");
     player = this.physics.add.sprite(spawnpoint.x, spawnpoint.y, "alien");
     this.physics.add.collider(player, objetos);
     this.physics.add.collider(player, relleno);
@@ -54,11 +58,13 @@ function create() {
     this.socket.on('Jugadores_conectados', function(jugadores) {
         for (var i = 0; i < jugadores.length; i++) {
             if (jugadores[i].playerId === self.socket.id) {
-                jugadores[i].x = spawnpoint.x;
-                jugadores[i].y = spawnpoint.y;
+                jugadores[i].x = spawnpoint[i].x;
+                jugadores[i].y = spawnpoint[i].y;
                 player.x = jugadores[i].x;
                 player.y = jugadores[i].y;
             } else {
+                jugadores[i].x = spawnpoint[i].x;
+                jugadores[i].y = spawnpoint[i].y;
                 let otro = self.physics.add.sprite(jugadores[i].x, jugadores[i].y, "alien");
                 self.physics.add.collider(otro, objetos);
                 self.physics.add.collider(otro, relleno);
