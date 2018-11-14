@@ -32,9 +32,9 @@ class Game extends Phaser.Scene {
       this.load.audio('principal', ['assets/music/principal.mp3']);
         this.load.image("tilesetNameInPhaser", "assets/tilsets/cajas.png");
         this.load.tilemapTiledJSON("level1", "assets/tilemaps/bombmap.json");
-        this.load.spritesheet("alien", "assets/atlas/alien.png", {
-            frameWidth: 36,
-            frameHeight: 32
+        this.load.spritesheet("alien", "assets/atlas/alien2.png", {
+            frameWidth: 30,
+            frameHeight: 30
         });
         this.load.spritesheet("bomb", "assets/atlas/bombita.png", {
             frameWidth: 32,
