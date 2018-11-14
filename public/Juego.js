@@ -29,6 +29,7 @@ class Game extends Phaser.Scene {
         console.log('SubScene: constructor');
     }
     preload() {
+      this.load.audio('principal', ['assets/music/principal.mp3']);
         this.load.image("tilesetNameInPhaser", "assets/tilsets/cajas.png");
         this.load.tilemapTiledJSON("level1", "assets/tilemaps/bombmap.json");
         this.load.spritesheet("alien", "assets/atlas/alien.png", {
@@ -37,10 +38,12 @@ class Game extends Phaser.Scene {
         });
         this.load.spritesheet("bomb", "assets/atlas/bombita.png", {
             frameWidth: 32,
-            frameHeight: 55
+            frameHeight: 40
         });
     }
     create() {
+        var musica = this.sound.add('principal',true);
+        musica.play();
         this.socket = io();
         let self = this;
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -205,7 +208,7 @@ class Game extends Phaser.Scene {
     }
     mover() {
         this.input.keyboard.on('keydown_SPACE', () => {
-            alert("ddd");
+
         });
         player.body.setVelocity(0);
         if (this.cursors.left.isDown) {
