@@ -16,6 +16,8 @@ const config = {
 const game = new Phaser.Game(config);
 let controls;
 let player;
+let spacebar;
+let bombCD=false;
 
 function preload() {
     this.load.image("tilesetNameInPhaser", "assets/tilsets/cajas.png");
@@ -24,10 +26,10 @@ function preload() {
         frameWidth: 36,
         frameHeight: 32
     });
-    this.load.spritesheet("bomb", "assets/atlas/dude.png", {
-        frameWidth: 36,
-        frameHeight: 32
-    });
+    this.load.spritesheet("bomb", "assets/atlas/bombita.png", {
+        frameWidth: 32,
+        frameHeight: 55
+          });
 }
 
 function create() {
@@ -55,6 +57,9 @@ function create() {
     player = this.physics.add.sprite(spawnpoint.x, spawnpoint.y, "alien");
     this.physics.add.collider(player, objetos);
     this.physics.add.collider(player, relleno);
+
+    spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
     //Establecimiento de la conexión con otros jugadores
     let self = this;
     this.socket = io();
@@ -120,12 +125,12 @@ function create() {
         repeat: -1
     });
     this.anims.create({
-        key: 'space',
+        key: 'bomba',
         frames: this.anims.generateFrameNumbers('bomb', {
             start: 0,
-            end: 32
+            end: 4
         }),
-        frameRate: 10,
+        frameRate: 3,
         repeat: -1
     });
     cursors = this.input.keyboard.createCursorKeys();
@@ -177,11 +182,22 @@ function update() {
     mover(this);
     //Emitir movimientos
     emitir_movimeintos(this);
+    let bombita;
+    if(spacebar.isDown){
+      if(!bombCD){
+        console.log("xD");
+        bombita = this.physics.add.sprite(player.x,player.y, 'bomb');
+        bombita.anims.play('bomba');
+        bombCD = true;
+      }
+    }
+
 }
 
-function bomba(posx, posy, self, objetos, relleno) {
+
+/*function bomba(posx, posy, self, objetos, relleno) {
     bomb = self.physics.add.sprite(posx, posy, 'bomb');
-}
+}*/
 
 function mover(self) {
     player.body.setVelocity(0);
@@ -204,9 +220,7 @@ function mover(self) {
     if (cursors.up.isDown && player.body.touching.down) {
         player.setVelocityY(-330);
     }
-    if (cursors.space.isDown) {
-        bomba(player.x, player.y, self, objetos, relleno);
-    }
+
 }
 
 function emitir_movimeintos(self) {
