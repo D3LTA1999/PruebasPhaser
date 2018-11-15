@@ -19,7 +19,7 @@ class MainScene extends Phaser.Scene {
     }
 }
 let controls;
-let player;
+var player;
 let bombCD = false;
 class Game extends Phaser.Scene {
     constructor() {
@@ -78,6 +78,9 @@ class Game extends Phaser.Scene {
         player = this.physics.add.sprite(spawnpoint.x, spawnpoint.y, "alien");
         this.physics.add.collider(player, objetos);
         this.physics.add.collider(player, relleno);
+        let bomb = this.physics.add.image(player.x, player.y, 'bomb');
+        //self.physics.add.overlap(player,bomb,this.bombacollide,null,self);
+
         //Establecimiento de la conexión con otros jugadores
         this.otrosjugadores = new Array();
         this.socket.on('Jugadores_conectados', function(jugadores) {
@@ -152,14 +155,12 @@ class Game extends Phaser.Scene {
         this.cursors = this.input.keyboard.createCursorKeys();
         // Debug graphics
         this.input.keyboard.once("keydown_D", event => {
-            // Turn on physics debugging to show player's hitbox
             this.physics.world.createDebugGraphic();
-            // Create worldLayer collision graphic above the player, but below the help text
             const graphics = this.add.graphics().setAlpha(0.75).setDepth(20);
             worldLayer.renderDebug(graphics, {
-                tileColor: null, // Color of non-colliding tiles
-                collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-                faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
+                tileColor: null,
+                collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255),
+                faceColor: new Phaser.Display.Color(40, 39, 37, 255)
             });
         });
         //Métodos de conexión con el servidor
@@ -196,16 +197,16 @@ class Game extends Phaser.Scene {
         let bombita;
         if (this.spacebar.isDown) {
             if (!bombCD) {
-                console.log("xD");
                 bombita = this.physics.add.sprite(player.x, player.y, 'bomb');
                 bombita.anims.play('bomba');
                 bombCD = true;
+                this.physics.add.collider(player, bombita);
             }
         }
     }
-    bomba(posx, posy, self, objetos, relleno) {
-        bomb = self.physics.add.sprite(posx, posy, 'bomb');
-    }
+
+
+
     mover() {
         this.input.keyboard.on('keydown_SPACE', () => {
 
