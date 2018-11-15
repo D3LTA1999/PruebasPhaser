@@ -45,6 +45,10 @@ class Game extends Phaser.Scene {
             frameWidth: 32,
             frameHeight: 32
         });
+        this.load.spritesheet("explosion", "assets/atlas/explosion.png", {
+            frameWidth: 32,
+            frameHeight: 32
+        });
     }
 
     create() {
@@ -156,11 +160,23 @@ class Game extends Phaser.Scene {
             key: 'bomba',
             frames: this.anims.generateFrameNumbers('bomb', {
                 start: 0,
-                end: 4
+                end: 3
             }),
             frameRate: 3,
             repeat: -1
         });
+        this.anims.create({
+            key: 'boom',
+            frames: this.anims.generateFrameNumbers('explosion', {
+                start: 0,
+                end: 5
+            }),
+            frameRate: 3,
+            repeat: -1
+        });
+
+
+
         this.cursors = this.input.keyboard.createCursorKeys();
         // Debug graphics
         this.input.keyboard.once("keydown_D", event => {
@@ -218,10 +234,16 @@ class Game extends Phaser.Scene {
       cooldownBomb(bombita){
         bombita.destroy();
         bombCD = false;
-        //let caboom = this.physics.add.sprite(bombita.x, bombita.y, 'explosion');
-        //caboom.anims.play('boomu');
-        //let timer = this.time.delayedCall(1000, destroyboom, [caboom], this);
+        let caboom = this.physics.add.sprite(bombita.x, bombita.y, 'explosion');
+        caboom.anims.play('boom');
+        let timer = this.time.delayedCall(1000, this.endboom, [caboom], this);
       }
+
+      endboom(catabum){
+        catabum.destroy();
+      }
+
+
     mover() {
         this.input.keyboard.on('keydown_SPACE', () => {
 
