@@ -24,6 +24,7 @@ class MainScene extends Phaser.Scene {
 }
 let controls;
 var player;
+var bombas;
 let bombCD = false;
 class Game extends Phaser.Scene {
     constructor() {
@@ -45,9 +46,13 @@ class Game extends Phaser.Scene {
             frameHeight: 40
         });
     }
+
     create() {
+      //música del juego
         var musica = this.sound.add('principal',true);
         musica.play();
+        //creaando el grupo de bombas
+         bombas = this.physics.add.staticGroup();
         this.socket = io();
         let self = this;
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -201,10 +206,11 @@ class Game extends Phaser.Scene {
         let bombita;
         if (this.spacebar.isDown) {
             if (!bombCD) {
-                bombita = this.physics.add.sprite(player.x, player.y, 'bomb');
-                bombita.anims.play('bomba');
+                bombas.create(player.x, player.y, 'bomb');
+                /*bombita = this.physics.add.sprite(player.x, player.y, 'bomb');
+                bombita.anims.play('bomba');*/
                 bombCD = true;
-                this.physics.add.collider(player, bombita);
+                this.physics.add.collider(player, bombas);
             }
         }
     }
