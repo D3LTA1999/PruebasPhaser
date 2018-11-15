@@ -41,9 +41,9 @@ class Game extends Phaser.Scene {
             frameWidth: 30,
             frameHeight: 30
         });
-        this.load.spritesheet("bomb", "assets/atlas/bombita.png", {
+        this.load.spritesheet("bomb", "assets/atlas/bomba.png", {
             frameWidth: 32,
-            frameHeight: 40
+            frameHeight: 32
         });
     }
 
@@ -172,6 +172,7 @@ class Game extends Phaser.Scene {
                 faceColor: new Phaser.Display.Color(40, 39, 37, 255)
             });
         });
+
         //Métodos de conexión con el servidor
         this.socket.on('nuevojugador', function(jugador) {
             const avatar = self.add.sprite(jugador.x, jugador.y, "alien");;
@@ -206,17 +207,21 @@ class Game extends Phaser.Scene {
         let bombita;
         if (this.spacebar.isDown) {
             if (!bombCD) {
-                bombas.create(player.x, player.y, 'bomb');
-                /*bombita = this.physics.add.sprite(player.x, player.y, 'bomb');
-                bombita.anims.play('bomba');*/
-                bombCD = true;
-                this.physics.add.collider(player, bombas);
+                bombita=bombas.create(player.x,player.y,"bomb");
+                bombita.anims.play("bomba");
+                let timer = this.time.delayedCall(2000, this.cooldownBomb, [bombita], this);
+                this.physics.add.collider(player,bombita);
+                bombCD=true;
             }
         }
     }
-
-
-
+      cooldownBomb(bombita){
+        bombita.destroy();
+        bombCD = false;
+        //let caboom = this.physics.add.sprite(bombita.x, bombita.y, 'explosion');
+        //caboom.anims.play('boomu');
+        //let timer = this.time.delayedCall(1000, destroyboom, [caboom], this);
+      }
     mover() {
         this.input.keyboard.on('keydown_SPACE', () => {
 
