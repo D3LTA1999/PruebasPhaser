@@ -7,13 +7,17 @@ class MainScene extends Phaser.Scene {
     preload() {
         this.load.image('buttonBG', 'assets/tilsets/button-bg.png');
         this.load.image('buttonText', 'assets/tilsets/button-text.png');
+        this.load.audio('logim', ['assets/music/logim.mp3']);
     }
     create() {
+      var login = this.sound.add('logim',true);
+        login.play();
         var bg = this.add.image(0, 0, 'buttonBG');
         var text = this.add.image(0, 0, 'buttonText');
         var container = this.add.container(512, 256, [bg, text]);
         bg.setInteractive();
         bg.once('pointerup', function() {
+          login.stop();
             this.scene.start('game');
         }, this);
     }
