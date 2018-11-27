@@ -11,7 +11,7 @@ class MainScene extends Phaser.Scene {
     }
     create() {
       var login = this.sound.add('logim',true);
-        login.play();
+        //login.play();
         var bg = this.add.image(0, 0, 'buttonBG');
         var text = this.add.image(0, 0, 'buttonText');
         var container = this.add.container(512, 256, [bg, text]);
@@ -34,7 +34,7 @@ class Game extends Phaser.Scene {
         console.log('SubScene: constructor');
     }
     preload() {
-      this.load.audio('principal', ['assets/music/principal.mp3']);
+        this.load.audio('principal', ['assets/music/principal.mp3']);
         this.load.image("tilesetNameInPhaser", "assets/tilsets/cajas.png");
         this.load.tilemapTiledJSON("level1", "assets/tilemaps/bombmap.json");
         this.load.spritesheet("alien", "assets/atlas/alien2.png", {
@@ -54,7 +54,7 @@ class Game extends Phaser.Scene {
     create() {
       //música del juego
         var musica = this.sound.add('principal',true);
-        musica.play();
+        //musica.play();
         //creaando el grupo de bombas
          bombas = this.physics.add.staticGroup();
         this.socket = io();
